@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Keyboard Input for chat-bubble</title>
+
+	<!-- for mobile screens -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- stylesheets are conveniently separated into components -->
+	<link rel="stylesheet" media="all" href="component/styles/setup.css">
+	<link rel="stylesheet" media="all" href="component/styles/says.css">
+	<link rel="stylesheet" media="all" href="component/styles/reply.css">
+	<link rel="stylesheet" media="all" href="component/styles/typing.css">
+	<link rel="stylesheet" media="all" href="component/styles/input.css">
+	<style>
+	body {
+		background: #dcdde0;
+	}
+	.bubble-container {
+		height: 100vh;
+	}
+	.bubble-container .input-wrap textarea {
+		margin: 0;
+		width: calc(100% - 30px);
+	}
+	</style>
+</head>
+<body>
+
+<!-- container element for chat window -->
+<div id="chat"></div>
+
+<!-- import the JavaScript file -->
+<script src="component/Bubbles.js"></script>
+<script>
+var balance = 50
+var user_input = ""
+var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
+
+  inputCallbackFn: function(o) {
+    var miss = function() {
+      bet = user_input.split(" ")
+       if(!isNaN(bet[0]) && bet[1] == "red" || bet[1] == "black" && bet.length ==2) {
+		amount = bet[0]
+		colour = bet[1]
+		new_balance = parseFloat(amount) + parseFloat(balance)
+		if (new_balance > 100) {
+			if(bet[1] == "red") { lose(amount, "Black!") }
+			else {lose(amount, "Red!")}
+		}
+		else {
+			let x = Math.random() * 10
+			if(x > 5) {
+				if(bet[1] == "red") { lose(amount, "Black!") }
+				else {lose(amount, "Red!")}
+			} else {
+				balance = new_balance
+				if(bet[1] == "red") { updateConvo(balance, "Red!") }
+				else {updateConvo(balance, "Black!")}
+				chatWindow.talk(convo)
+			}
+			
+		}
+	       }
+      else {   
+	      chatWindow.talk(
+		{
+		  "i-dont-get-it": {
+		    says: [
+		      "Sorry, I don't get it 😕. Please respond in  the following formats: 5 red or 5 black"
+		    ],
+		    reply: o.convo[o.standingAnswer].reply
+		  }
+		},
+		"i-dont-get-it"
+	      )
+      }
+    }
+
+    // do this if answer found
+    var match = function(key) {
+      setTimeout(function() {
+        chatWindow.talk(convo, key) // restart current convo from point found in the answer
+      }, 600)
+    }
+
+    // sanitize text for search function
+    var strip = function(text) {
+      return text.toLowerCase().replace(/[\s.,\/#!$%\^&\*;:{}=\-_'"`~()]/g, "")
+    }
+
+    // search function
+    var found = false
+    o.convo[o.standingAnswer].reply.forEach(function(e, i) {
+      user_input = o.input
+      strip(e.question).includes(strip(o.input)) && o.input.length > 0
+        ? (found = e.answer)
+        : found ? null : (found = false)
+    })
+    found ? match(found) : miss()
+  }
+})
+
+// "Basic chat-bubble Example" (1-basics.html)
+var convo = {
+  ice: {
+    says: ["Hi", "Would you like banana or ice cream?"],
+    reply: [
+      {
+        question: "Balance",
+        answer: "balanceFunction"
+      },
+      {
+      	question: "Place bet",
+      	answer: "betFunction"
+      },
+      {
+        question: "Help",
+        answer: "The goal of this challenge is for you to beat me and I'll give you the flag"
+      }
+    ]
+  }
+}
+
+lose = function(amount, color) {
+	balance = parseFloat(balance) - parseFloat(amount)
+	updateConvo(balance, color)
+	chatWindow.talk(convo)
+}
+
+// this function is called when user asks for banana
+balanceFunction = function() {
+  if ( balance >= 100) { 
+  	var winner = {
+  		ice: {
+  			says: ["You win! The flag is ${123456789}"]
+  			}
+  			}
+  	chatWindow.talk(winner, "ice")
+  }
+  else {  chatWindow.talk(convo, "ice") } // the conversation can be easily restarted from here.
+}
+
+updateConvo = function(balance, state) {
+	greeting = "Your new balance is " + balance
+	convo = {
+	  ice: {
+	    says: [state, greeting],
+	    reply: [
+	      {
+		question: "Balance",
+		answer: "balanceFunction"
+	      },
+	      {
+	      	question: "Place bet",
+	      	answer: "Write your bet in the following format [number] [colour]. E.g. 10 red"
+	      },
+	      {
+		question: "Help",
+		answer: "The goal of this challenge is for you to beat me and I'll give you the flag"
+	      }
+	    ]
+	  }
+	}
+}
+
+
+// pass JSON to your function and you're done!
+chatWindow.talk(convo)
+
+
+</script>
+
+
+</body>
