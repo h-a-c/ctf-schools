@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/dmitrizzle/chat-bubble/issues"
   },
-  "homepage": "https://github.com/dmitrizzle/chat-bubble#readme"
+  "homepage": "https://github.com/dmitrizzle/chat-bubble#readme",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
