@@ -45,7 +45,7 @@ var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
 		amount = bet[0]
 		colour = bet[1]
 		new_balance = parseFloat(amount) + parseFloat(balance)
-		if (new_balance > 100) {
+		if (new_balance > 100 || new_balance == 100) {
 			if(bet[1] == "red") { lose(amount, "Black!") }
 			else {lose(amount, "Red!")}
 		}
@@ -70,8 +70,21 @@ var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
 		    says: [
 		      "Sorry, I don't get it 😕. Please respond in  the following formats: 5 red or 5 black"
 		    ],
-		    reply: o.convo[o.standingAnswer].reply
-		  }
+		     reply: [
+      {
+        question: "Balance",
+        answer: "balanceFunction"
+      },
+      {
+        question: "How do I get the flag",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint 1"
+      }
+    ]
+	  }
 		},
 		"i-dont-get-it"
 	      )
@@ -105,28 +118,108 @@ var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
 // "Basic chat-bubble Example" (1-basics.html)
 var convo = {
   ice: {
-    says: ["Hi", "Would you like banana or ice cream?"],
+    says: ["Welcome to the blackjack bot", "If you score 100 points, you win!"],
     reply: [
       {
-        question: "Balance",
+        question: "Balance / Cash Out",
         answer: "balanceFunction"
       },
       {
-      	question: "Place bet",
-      	answer: "betFunction"
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+      {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+    ]
+  },
+  howFunction: {
+  	says: ["The goal is to score 100 points and then cash out to win"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
       },
       {
         question: "Help",
-        answer: "The goal of this challenge is for you to beat me and I'll give you the flag"
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+      {
+      	question: "Hint 2",
+      	answer: "Hint2"
       }
-    ]
+  	]
+  },
+  Hint1: {
+  	says: ["The game is rigged!"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
+      },
+      {
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+      {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+  	]
+  },
+  Hint2: {
+  	says: ["Are there any limitations on how much you can bet?"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
+      },
+      {
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+      {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+  	]
   }
 }
 
 lose = function(amount, color) {
 	balance = parseFloat(balance) - parseFloat(amount)
+	if(balance < 0 || balance == 0) {
+		restart_game()
+		return
+	}
 	updateConvo(balance, color)
 	chatWindow.talk(convo)
+}
+
+restart_game = function() {
+	var loser = {
+	  		ice: {
+	  			says: ["You lose! Refresh the browser to try again."]
+	  			}
+	  			}
+	  	chatWindow.talk(loser, "ice")
 }
 
 // this function is called when user asks for banana
@@ -139,7 +232,97 @@ balanceFunction = function() {
   			}
   	chatWindow.talk(winner, "ice")
   }
-  else {  chatWindow.talk(convo, "ice") } // the conversation can be easily restarted from here.
+  else {  
+	currentBalance = "Your balance is " + balance
+  	convo = {
+	  ice: {
+	    says: [currentBalance],
+	    reply: [
+	      {
+		question: "Balance / Cash Out",
+		answer: "balanceFunction"
+	      },
+	      {
+		question: "Help",
+		answer: "howFunction"
+	      },
+        {
+	      	question: "Hint 1",
+	      	answer: "Hint1"
+	      },
+       {
+  	question: "Hint 2",
+  	answer: "Hint2"
+  }
+	    ]
+	  },
+	  howFunction: {
+	  	says: ["The goal is to score 100 points and then cash out to win"],
+	  	reply: [
+	      {
+	        question: "Balance / Cash Out",
+	        answer: "balanceFunction"
+	      },
+	      {
+	        question: "Help",
+	        answer: "howFunction"
+	      },
+	      {
+	      	question: "Hint 1",
+	      	answer: "Hint1"
+	      },
+	       {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+	  	]
+	  },
+  Hint1: {
+  	says: ["The game is rigged!"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
+      },
+      {
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+       {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+  	]
+  },
+  Hint2: {
+  	says: ["Are there any limitations on how much I can bet?"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
+      },
+      {
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+      {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+  	]
+  }
+	}
+	chatWindow.talk(convo, "ice")
+
+  } // the conversation can be easily restarted from here.
 }
 
 updateConvo = function(balance, state) {
@@ -149,18 +332,85 @@ updateConvo = function(balance, state) {
 	    says: [state, greeting],
 	    reply: [
 	      {
-		question: "Balance",
+		question: "Balance / Cash Out",
 		answer: "balanceFunction"
 	      },
 	      {
-	      	question: "Place bet",
-	      	answer: "Write your bet in the following format [number] [colour]. E.g. 10 red"
+		question: "Help",
+		answer: "howFunction"
+	      },
+        {
+	      	question: "Hint 1",
+	      	answer: "Hint1"
+	      },
+       {
+  	question: "Hint 2",
+  	answer: "Hint2"
+  }
+	    ]
+	  },
+	  howFunction: {
+	  	says: ["The goal is to score 100 points and then cash out to win"],
+	  	reply: [
+	      {
+	        question: "Balance / Cash Out",
+	        answer: "balanceFunction"
 	      },
 	      {
-		question: "Help",
-		answer: "The goal of this challenge is for you to beat me and I'll give you the flag"
-	      }
-	    ]
+	        question: "Help",
+	        answer: "howFunction"
+	      },
+	      {
+	      	question: "Hint 1",
+	      	answer: "Hint1"
+	      },
+	       {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+	  	]
+	  },
+  Hint1: {
+  	says: ["The game is rigged!"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
+      },
+      {
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+       {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+  	]
+  },
+  Hint2: {
+  	says: ["Are there any limitations on how much I can bet?"],
+  	reply: [
+      {
+        question: "Balance / Cash Out",
+        answer: "balanceFunction"
+      },
+      {
+        question: "Help",
+        answer: "howFunction"
+      },
+      {
+      	question: "Hint 1",
+      	answer: "Hint1"
+      },
+      {
+      	question: "Hint 2",
+      	answer: "Hint2"
+      }
+  	]
 	  }
 	}
 }
