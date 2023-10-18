@@ -39,7 +39,7 @@
         "chatWindow" // ...and name of the function as a parameter
       );
         var score = 0
-        var counter = 0
+        var counter = 1
         var image1 = "<img src=https://i.gifer.com/Dg6.gif />"
         var image2 = "<img src=https://i.gifer.com/kRf.gif />"
         var image3 = "<img src=https://i.gifer.com/IM1n.gif />"
@@ -50,7 +50,7 @@
         var image8 = "<img src=https://i.gifer.com/15Su.gif />"
         var image9 = "<img src=https://i.gifer.com/7iW.gif />"
         var image10 = "<img src=https://i.gifer.com/wIY.gif />"
-        var answers = ["1","1","1","1", "1", "1","1","1","1","1","1"]
+        var answers = ["1","1","1","1","1","1","1","1","1","1","1","1"]
       // conversation object defined separately, but just the same as in the
       // "Basic chat-bubble Example" (1-basics.html) -- with an exception that...
       // ...allows running your scripts on-demand
@@ -59,39 +59,42 @@
           says: ["This is a phishing quiz. You need to score full marks to beat me", "Good Luck!","<img src=https://meanbusiness.com/wp-content/uploads/2018/04/PuppyEatingBanana.gif />"],
           reply: [
             {
-              question: "Real",
-              answer: "realFunction",
-            },
-            {
-              question: "Fake",
-              answer: "fakeFunction",
-            },
+              question: "Lets go!",
+              answer: "beginFunction",
+            }
           ],
         }
       };
 
-      // this function is called when user asks for banana
+      var beginFunction = function () {
+        updateConvo(counter)
+        chatWindow.talk(convo, "ice"); // the conversation can be easily restarted from here.
+      };
+
       var realFunction = function () {
         checkAnswer(counter, "1")
-        counter++
+        console.log('score = '+score)
         updateConvo(counter)
         chatWindow.talk(convo, "ice"); // the conversation can be easily restarted from here.
       };
 
       var fakeFunction = function() {
         checkAnswer(counter, "0")
-        counter++
         updateConvo(counter)
         chatWindow.talk(convo, "ice"); // the conversation can be easily restarted from here.
       }
 
       var checkAnswer = function(counter, ans) {
+        console.log('checkans')
+        console.log('counter = '+counter)
+        console.log('ans = '+ans + 'answers[counter] = ' + answers[counter])
         if (ans == answers[counter]) {
           score++
         }
       }
 
       var updateConvo = function(id) {
+        counter++
         question_string = "Question "+ id
         image = ""
         switch(id) {
@@ -128,7 +131,7 @@
         default:
           image = image1
         }
-        if (id != 10) {
+        if (id != 11) {
           convo = {
           ice: {
             says: [question_string, image],
@@ -145,14 +148,14 @@
           }
         }
        } 
-       if (id == 10 && score == 10){
+       if (id == 11 && score == 10){
         convo = {
           ice: {
             says: ["Congrats you win the game!"]
           }
         }
        }
-       if (id == 10 && score != 10) {
+       if (id == 11 && score != 10) {
         convo = {
           ice: {
             says: ["You scored "+ score, "Please refresh the page and try again"]
