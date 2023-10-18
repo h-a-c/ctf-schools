@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Run Scripts from chat-bubble</title>
+
+    <!-- for mobile screens -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- stylesheets are conveniently separated into components -->
+    <link rel="stylesheet" media="all" href="component/styles/setup.css" />
+    <link rel="stylesheet" media="all" href="component/styles/says.css" />
+    <link rel="stylesheet" media="all" href="component/styles/reply.css" />
+    <link rel="stylesheet" media="all" href="component/styles/typing.css" />
+    <link rel="stylesheet" media="all" href="component/styles/input.css" />
+    <style>
+      body {
+        background: #dcdde0;
+      }
+      .bubble-container {
+        height: 100vh;
+      }
+      .bubble-container .input-wrap textarea {
+        margin: 0;
+        width: calc(100% - 30px);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- container element for chat window -->
+    <div id="chat"></div>
+
+    <!-- import the JavaScript file -->
+    <script src="component/Bubbles.js"></script>
+    <script>
+      // initialize by constructing a named function...
+      var chatWindow = new Bubbles(
+        document.getElementById("chat"), // ...passing HTML container element...
+        "chatWindow" // ...and name of the function as a parameter
+      );
+        var score = 0
+        var counter = 0
+        var image1 = "<img src=https://i.gifer.com/Dg6.gif />"
+        var image2 = "<img src=https://i.gifer.com/kRf.gif />"
+        var image3 = "<img src=https://i.gifer.com/IM1n.gif />"
+        var image4 = "<img src=https://i.gifer.com/u9o.gif />"
+        var image5 = "<img src=https://i.gifer.com/G7sv.gif />"
+        var image6 = "<img src=https://i.gifer.com/8V.gif />"
+        var image7 = "<img src=https://i.gifer.com/k3.gif />"
+        var image8 = "<img src=https://i.gifer.com/15Su.gif />"
+        var image9 = "<img src=https://i.gifer.com/7iW.gif />"
+        var image10 = "<img src=https://i.gifer.com/wIY.gif />"
+        var answers = ["1","1","1","1", "1", "1","1","1","1","1","1"]
+      // conversation object defined separately, but just the same as in the
+      // "Basic chat-bubble Example" (1-basics.html) -- with an exception that...
+      // ...allows running your scripts on-demand
+      var convo = {
+        ice: {
+          says: ["This is a phishing quiz. You need to score full marks to beat me", "Good Luck!","<img src=https://meanbusiness.com/wp-content/uploads/2018/04/PuppyEatingBanana.gif />"],
+          reply: [
+            {
+              question: "Real",
+              answer: "realFunction",
+            },
+            {
+              question: "Fake",
+              answer: "fakeFunction",
+            },
+          ],
+        }
+      };
+
+      // this function is called when user asks for banana
+      var realFunction = function () {
+        checkAnswer(counter, "1")
+        counter++
+        updateConvo(counter)
+        chatWindow.talk(convo, "ice"); // the conversation can be easily restarted from here.
+      };
+
+      var fakeFunction = function() {
+        checkAnswer(counter, "0")
+        counter++
+        updateConvo(counter)
+        chatWindow.talk(convo, "ice"); // the conversation can be easily restarted from here.
+      }
+
+      var checkAnswer = function(counter, ans) {
+        if (ans == answers[counter]) {
+          score++
+        }
+      }
+
+      var updateConvo = function(id) {
+        question_string = "Question "+ id
+        image = ""
+        switch(id) {
+        case 1:
+          image = image1
+          break;
+        case 2:
+          image = image2
+          break;
+        case 3:
+          image = image3
+          break;
+        case 4:
+          image = image4
+          break;
+        case 5:
+          image = image5
+          break;
+        case 6:
+          image = image6
+          break;
+        case 7:
+          image = image7
+          break;
+        case 8:
+          image = image8
+          break;
+        case 9:
+          image = image9
+          break;
+        case 10:
+          image = image10
+          break;
+        default:
+          image = image1
+        }
+        if (id != 10) {
+          convo = {
+          ice: {
+            says: [question_string, image],
+            reply: [
+            {
+              question: "Real",
+              answer: "realFunction",
+            },
+            {
+              question: "Fake",
+              answer: "fakeFunction",
+            }
+            ]
+          }
+        }
+       } 
+       if (id == 10 && score == 10){
+        convo = {
+          ice: {
+            says: ["Congrats you win the game!"]
+          }
+        }
+       }
+       if (id == 10 && score != 10) {
+        convo = {
+          ice: {
+            says: ["You scored "+ score, "Please refresh the page and try again"]
+          }
+        }
+       }
+      }
+      // pass JSON to your function and you're done!
+      chatWindow.talk(convo);
+    </script>
+  </body>
+</html>
