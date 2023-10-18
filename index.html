@@ -46,18 +46,18 @@ var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
 		colour = bet[1]
 		new_balance = parseFloat(amount) + parseFloat(balance)
 		if (new_balance > 100 || new_balance == 100) {
-			if(bet[1] == "red") { lose(amount, "Black!") }
-			else {lose(amount, "Red!")}
+			if(bet[1] == "red") { lose(amount, "⚫ Black!") }
+			else {lose(amount, "🔴 Red!")}
 		}
 		else {
 			let x = Math.random() * 10
 			if(x > 5) {
-				if(bet[1] == "red") { lose(amount, "Black!") }
-				else {lose(amount, "Red!")}
+				if(bet[1] == "red") { lose(amount, "⚫ Black!") }
+				else {lose(amount, "🔴 Red!")}
 			} else {
 				balance = new_balance
-				if(bet[1] == "red") { updateConvo(balance, "Red!") }
-				else {updateConvo(balance, "Black!")}
+				if(bet[1] == "red") { updateConvo(balance, "🔴 Red!") }
+				else {updateConvo(balance, "⚫ Black!")}
 				chatWindow.talk(convo)
 			}
 			
@@ -118,7 +118,7 @@ var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
 // "Basic chat-bubble Example" (1-basics.html)
 var convo = {
   ice: {
-    says: ["Welcome to the blackjack bot", "If you score 100 points, you win!"],
+    says: ["Welcome to the Red/Black bot. Your goal is to guess if the next move will be 🔴red or ⚫black", "If you score 100 points, you win!"],
     reply: [
       {
         question: "Balance / Cash Out",
@@ -160,7 +160,7 @@ var convo = {
   	]
   },
   Hint1: {
-  	says: ["The game is rigged!"],
+  	says: ["The game is rigged! Red or Black, it doesn't matter."],
   	reply: [
       {
         question: "Balance / Cash Out",
@@ -181,7 +181,7 @@ var convo = {
   	]
   },
   Hint2: {
-  	says: ["Are there any limitations on how much you can bet?"],
+  	says: ["Have you tried negative numbers?"],
   	reply: [
       {
         question: "Balance / Cash Out",
@@ -227,7 +227,7 @@ balanceFunction = function() {
   if ( balance >= 100) { 
   	var winner = {
   		ice: {
-  			says: ["You win! The flag is ${123456789}"]
+  			says: ["You win! The flag is ${out_the_loop}"]
   			}
   			}
   	chatWindow.talk(winner, "ice")
@@ -278,7 +278,7 @@ balanceFunction = function() {
 	  	]
 	  },
   Hint1: {
-  	says: ["The game is rigged!"],
+  	says: ["The game is rigged! Red or Black, it doesn't matter."],
   	reply: [
       {
         question: "Balance / Cash Out",
@@ -371,7 +371,7 @@ updateConvo = function(balance, state) {
 	  	]
 	  },
   Hint1: {
-  	says: ["The game is rigged!"],
+  	says: ["The game is rigged! Red or Black, it doesn't matter"],
   	reply: [
       {
         question: "Balance / Cash Out",
@@ -392,7 +392,7 @@ updateConvo = function(balance, state) {
   	]
   },
   Hint2: {
-  	says: ["Are there any limitations on how much I can bet?"],
+  	says: ["Have you tried negative numbers?"],
   	reply: [
       {
         question: "Balance / Cash Out",
