@@ -149,9 +149,11 @@
         }
        } 
        if (id == 11 && score == 10){
+       	const d = new Date();
+       	flag = "Your flag is ${fishing_mast3r_"+d.getTime()+"}"
         convo = {
           ice: {
-            says: ["Congrats you win the game!"]
+            says: ["Congrats you win the game!", flag]
           }
         }
        }
