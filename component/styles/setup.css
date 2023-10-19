@@ -2,10 +2,8 @@
 .bubble-container {
 	background: #dcdde0;
 	height: 520px;
-	max-width: 750px;
 	width: 100%;
 	margin: 0 auto;
-	overflow: hidden;
 	position: relative;
 }
 .bubble-wrap {
